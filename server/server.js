@@ -14,10 +14,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-
-app.use(require('./routes/usuario'));
-
-
+//configuración global de rutas
+app.use(require('./routes/index'));
 
 // mongoose.connect('mongodb://localhost:27017/cafe', (err, res) => {
 //   if (err) throw err;
@@ -27,6 +25,7 @@ let coneccionDB = async () => {
     await mongoose.connect(process.env.urlDB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useFindAndModify: true,
         useCreateIndex: true
     });
 }
