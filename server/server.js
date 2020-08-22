@@ -30,7 +30,8 @@ let coneccionDB = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useFindAndModify: false
     });
 }
 coneccionDB().then(() => {

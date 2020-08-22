@@ -20,7 +20,7 @@ app.get('/usuario', verificaToken, (req, res) => {
                 });
             }
 
-            Usuario.count({ estado: true }, (err, conteo) => {
+            Usuario.countDocuments({ estado: true }, (err, conteo) => {
                 res.json({
                     ok: true,
                     usuariosMostardos: usuarios.length,
@@ -57,7 +57,7 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
-    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, usuarioDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -72,6 +72,7 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
                 }
             });
         }
+        console.log(body);
         res.json({
             ok: true,
             usuario: usuarioDB
@@ -114,7 +115,7 @@ app.delete("/usuario/:id", [verificaToken, verificaAdmin_Role], (req, res) => {
                 //message; 'Usuario no encontrado'
             });
         }
-        if (!usuarioDesactivado) {  //usuarioBorrado === null
+        if (usuarioDesactivado.estado === false) {  //usuarioBorrado === null
             return res.status(400).json({
                 ok: false,
                 err: {
